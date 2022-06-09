@@ -1,0 +1,158 @@
+﻿@model Aircnc.FrontStage.Models.ViewModels.RoomOwner.CalendarViewModel
+@{
+    ViewData["Title"] = "編輯月曆";
+
+    Layout = "RoomOwnerNavbar.cshtml";
+    var jsonDrop = Html.Raw(ViewData["JsonUpDown"]);
+}
+
+@section topCSS{
+    <style>
+        td {
+            border: 1px solid #EBEBEB;
+            height: 80px;
+        }
+
+        #Change_area {
+            min-height: 100vh;
+        }
+
+        .input_price {
+            height: 3rem;
+            border: 1px solid #B0B0B0;
+            border-radius: 5px;
+            padding-left: 2rem;
+        }
+    </style>
+}
+
+
+<body>
+    <div class="contanire-fluid">
+        <div class="row ps-5">
+            <!-- 月曆區 -->
+            <div class="col-9">
+
+                <div class="w-100 d-flex">
+                    <div class="my-5 fs-2 ms-2 me-auto" id="monthtext"></div>
+                    <div class="dropdown ms-auto my-auto">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            @if (Model.UserAllRooms.Count() > 0)
+                            {
+                                @*@Model.UserAllRooms[0].RoomName;*@
+                                var p = "請選擇房源";
+                                @p;
+
+                            }
+                            else {
+                                var p = "尚未有房源";
+                                @p;
+
+                            }
+
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="RoomNameDropMenu">
+                            @*<li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>*@
+                        </ul>
+                    </div>
+                </div>
+                <table class="table  ">
+                    <thead class="table">
+                        <tr>
+                            <th>日</th>
+                            <th>一</th>
+                            <th>二</th>
+                            <th>三</th>
+                            <th>四</th>
+                            <th>五</th>
+                            <th>六</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 動態生成 -->
+                    </tbody>
+                </table>
+                @*<div class="col-12 d-flex ">
+                    <button class="btn btn-primary ms-auto" onclick="lastMonth()">上個月</button>
+                    <button class="btn btn-primary ms-3" onclick="nextMonth()">下個月</button>
+                </div>*@
+            </div>
+
+            <!-- 選項 -->
+            @*<div class="col-3 border-start" id="Change_area">
+                <div class="row mt-5  ">
+                    <div class="col-12 fs-3 fw-bolder mt-5 ">{{4月9日 週六}}</div>
+                    <div class="col-12 d-flex justify-content-between mt-5 pb-5 border-bottom">
+                        <div class="fs-5 mt-auto mb-auto fw-bolder">可供預定</div>
+                        <div>
+                            <button class="btn fs-2"><i class="far fa-check-circle"></i></button>
+                            <button class="btn fs-2"><i class="far fa-times-circle"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-12 border-bottom">
+                        <div class="mt-3 fs-5 fw-bolder">每晚訂價</div>
+                        <div id="input_ctrl " class="w-100 mt-3 mb-5">
+                            <input type="text" value="500" class="w-75 input_price"
+                                   onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+
+        </div>
+    </div>
+
+
+    @section endJS{ 
+    <script>
+
+        //Dom
+        const RoomNameDropMenu = document.getElementById('RoomNameDropMenu')
+
+        window.onload = function () {
+            
+            console.log(dropSourse)
+            initDropMenu()
+        }       
+        let dropSourse = []
+        dropSourse = @jsonDrop
+        console.log(dropSourse)
+        function initDropMenu() {
+            RoomNameDropMenu.innerHTML = ''
+
+            if (dropSourse.length == 0) {
+                let li = document.createElement('li')
+                let a = document.createElement('a')
+                a.innerText = "創建房源"
+                a.setAttribute('class', 'dropdown-item')
+                a.setAttribute('href', `/RoomOwner/CreateRoom`)
+                li.appendChild(a)
+                RoomNameDropMenu.appendChild(li)
+            }
+            else {
+                dropSourse.forEach(room => {
+                    let li = document.createElement('li')
+                    let a = document.createElement('a')
+                    a.innerText = room.RoomName
+                    a.setAttribute('class', 'dropdown-item')
+                    a.setAttribute('href', `/RoomOwner/CalendarRoomId?roomid=${room.RoomId}`)
+                    li.appendChild(a)
+                    //要寫超連結src
+                    RoomNameDropMenu.appendChild(li)
+
+                })
+            }
+
+
+                //< li > <a class="dropdown-item" href="#">Action</a></li >
+                //<li><a class="dropdown-item" href="#">Another action</a></li>
+                //<li><a class="dropdown-item" href="#">Something else here</a></li>
+
+        }
+    </script>
+    }
+</body>

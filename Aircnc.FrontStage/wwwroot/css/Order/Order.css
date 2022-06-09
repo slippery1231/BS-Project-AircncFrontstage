@@ -1,0 +1,117 @@
+﻿/* container */
+.icon {
+    color: rgb(217,9,100);
+    margin: 20px 0;
+}
+
+.topic {
+    margin-top: 100px;
+}
+
+.content-box .reservation {
+    border: 1px solid rgb(220, 220, 220);
+}
+
+.content-box .description {
+    color: rgb(113,113,113);
+}
+
+.order-detail-link:hover{
+    border-bottom:none;
+    color:#000000;
+}
+.orderIndexPic{
+    width:600px;
+    height:267px;
+}
+
+.search_btn {
+    background-color: rgb(217,9,100);
+    display: block;
+}
+
+.search_btn a:hover {
+    border-bottom: none;
+}
+
+/*訂單圖片*/
+.room-picture {
+    border-radius: 0 25px 25px 0;
+    /*outline: 1px solid red;*/
+    min-height:100%;
+    object-fit:cover;
+}
+
+.room-picture-container {
+    min-height:400px;
+    position:relative;
+    top:-25px;
+    left:24px;
+    overflow:hidden;
+}
+
+
+/* 歷史紀錄區塊 */
+.history {
+    margin-bottom: 25px;
+}
+
+.history .row img {
+    width: 100px;
+    height: 100px;
+    display: flex;
+}
+
+.history .row a:hover {
+    color: #000;
+    border-bottom: none;
+}
+/* 取消紀錄 */
+.cancel {
+    margin-bottom: 25px;
+}
+
+.cancel .row img {
+    width: 100px;
+    height: 100px;
+    display: flex;
+}
+
+.cancel .row a:hover {
+    color: #000;
+    border-bottom: none;
+}
+
+/* 找不到預定區塊 */
+.not-found {
+    border-top: 1px solid rgb(220, 220, 220);
+    padding-top: 20px;
+}
+
+.info:hover {
+    color: #000;
+}
+.order {
+    border-radius: 25px;
+    height:350px;
+    overflow:hidden;
+}
+
+/* 入退房日期 */
+.check-in-out-date {
+    border-right: 1px solid lightgray;
+    padding-right:5%;
+    /*outline:1px solid red;*/
+    box-sizing:content-box;
+}
+
+/* 入住地址 */
+.stay-address {
+    margin-left: 10px;
+}
+.date-address-content {
+    border-top: 1px solid lightgray;
+    color: rgb(72, 72, 72);
+    padding-top: 20px;
+}
+

@@ -1,0 +1,155 @@
+a {
+    text-decoration: none;
+    color: black;
+}
+
+    a:hover {
+        border-bottom: 1px solid #000;
+    }
+
+.navbar {
+    position: fixed;
+    top: 0;
+    z-index: 4;
+}
+
+.navbar-brand:hover {
+    border: none;
+}
+
+.logo {
+    width: 100px;
+}
+
+li {
+    list-style: none;
+}
+
+footer ul {
+    font-size: 12px;
+}
+
+footer h4 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.dropdown-menu.dropdown-menu-end {
+    border-radius: 20px;
+}
+
+.social:hover {
+    border: none;
+    color: #faa;
+    transition: 0.3s ease;
+}
+
+section {
+    margin-top: 120px;
+    margin-bottom: 50px;
+}
+
+.breadcrumb {
+    color: #484848;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+.title h4 {
+    color: #484848;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 36px;
+}
+
+.lower-container {
+    display: flex;
+}
+
+#edit-btn {
+    font-size: 16px;
+    font-weight: bold;
+    color: #008489;
+    width: 11%;
+    margin: 0px;
+    padding: 0px;
+    text-align: right;
+    display: inline;
+}
+
+    #edit-btn:hover {
+        text-decoration: none;
+        color: #008489;
+        border: none;
+        font-weight: bold;
+    }
+
+.btn-check:focus + .btn, .btn:focus {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+.each-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .each-item h5 {
+        color: #484848;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+#select-language {
+    width: 100%;
+    border: lightgray solid;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#select-currency {
+    width: 100%;
+    border: lightgray solid;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#select-time-zone {
+    width: 100%;
+    border: lightgray solid;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.right-container {
+    box-sizing: border-box;
+    height: 210px;
+    padding: 2%;
+    border: lightgray solid;
+    border-radius: 5px;
+}
+
+#hr-sm-display {
+    display: none;
+}
+
+@media screen and (max-width:767px) {
+    .right-container {
+        box-sizing: border-box;
+        height: 5%;
+        padding: 2%;
+        border: none;
+    }
+
+    #hr-sm-display {
+        display: block;
+    }
+}

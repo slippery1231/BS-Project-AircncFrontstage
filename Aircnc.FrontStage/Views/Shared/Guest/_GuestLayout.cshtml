@@ -1,0 +1,471 @@
+﻿@using Aircnc.FrontStage.Models.Entities;
+@using static Aircnc.FrontStage.Models.Entities.User;
+
+
+@model Aircnc.FrontStage.Models.ViewModels.Guest.SearchVM
+@{
+    var isLogin = User.Identity.IsAuthenticated;  //判斷是否有登入
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-signin-client_id" content="424934713546-h4hctt0sgsonpippt1opk7pa0omviune.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css" />
+    <link href="~/css/Nav_Footer/normalize.css" rel="stylesheet" />
+    <link href="~/css/Nav_Footer/homepage.css" rel="stylesheet" />
+    <link href="~/css/Guest_Module/nav-search-btn.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/js-datepicker/dist/datepicker.min.css">
+
+    @await RenderSectionAsync("topCSS", required: false)
+    <title>@ViewData["Title"]</title>
+    <style>
+        .img-ctrl {
+            width: 50px;
+            height: 50px;
+            border: 1px double #E4E4E4;
+            border-radius: 50%;
+            padding: 5px;
+            overflow: hidden;
+        }
+
+        .guest_layout_usericon {
+            border: 1px double #E4E4E4;
+            border-radius: 50%;
+        }
+
+        .qs-controls {
+            background: none !important;
+        }
+
+        .btn_navbar_search, .btn_login {
+            color: #ff385c;
+            font-weight: bolder;
+            border: 1px solid #ff385c;
+            border-radius: 10px;
+        }
+
+        .btn_navbar_search:hover, .btn_login:hover {
+            background-color: #ff385c;
+            color: #fff;
+        }
+
+        .btn:focus {
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-light bg-white border-bottom container-fluid">
+            <div class="container flex-nowrap">
+                <a href="~/Home/Index" class="navbar-brand col-1">
+                    <img src="~/Img/logo.jpg" class="logo" alt="logo" />
+                </a>
+                <button type="button" class="btn btn_navbar_search rounded-pill search-bar" data-bs-toggle="modal" data-bs-target="#nav-search">
+                    你想去哪裡?
+                </button>
+                <div class="btn-group">
+                    @if (!isLogin)
+                    {
+                        <button type="button" class="btn btn_login dropdown-toggle rounded-pill" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                            登入
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="guest_layout_usericon" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                            <div class="img-ctrl">
+                                <!-- 放使用者頭像 -->
+                                @*<img src="/Img/UserImgSample.jpeg" alt="" class="img-fluid">*@
+                                <img src="@User.Claims.First(x => x.Type == "UserPhoto").Value"
+                                     alt="UserPhoto" class="img-fluid userimg" />
+
+                            </div>
+                        </button>
+                    }
+
+                    <ul class="dropdown-menu dropdown-menu-end overflow-hidden">
+                        @* 登入前的區塊 *@
+                        @if (!isLogin)
+                        {
+                            <li><a class="dropdown-item sign" href="#" data-bs-toggle="modal" data-bs-target="#SignupModal">註冊</a></li>
+                            <li><a class="dropdown-item login" href="#" data-bs-toggle="modal" data-bs-target="#LoginModal">登入</a></li>
+                            <li><a class="dropdown-item rent" href="#" data-bs-toggle="modal" data-bs-target="#LoginModal">出租房源</a></li>
+
+                        }
+
+                        @* 登入後才會有的區塊 *@
+                        else
+                        {
+                            <li><a class="dropdown-item" id="message" href="#">訊息</a></li>
+                            <li><a class="dropdown-item" id="notification" href="#">通知</a></li>
+                            <li><a class="dropdown-item" id="travel" href="~/Order/OrderList">旅程</a></li>
+                            <li><a class="dropdown-item" id="wishlist" href="#">心願單</a></li>
+                            <li><a class="dropdown-item" id="manage-room" href="~/RoomOwner/HostHomePageReservation">管理房源</a></li>
+                            <li><a class="dropdown-item" id="account" href="~/Personal/PersonalBox">帳號</a></li>
+                            <li><a class="dropdown-item" id="help" href="#">協助</a></li>
+
+                            @*@switch (switch_on)
+                            {
+                                default:
+                            }*@
+
+                            @if (User.Claims.First(x => x.Type == "UserLoginType").Value == ((int)TypeOfLoginEnum.Google).ToString())
+                            {
+                                <li><a class="dropdown-item" id="logout" href="~/Account/Logout" onclick="signOut()">登出</a></li>
+
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" id="logout" href="~/Account/Logout">登出</a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- navigation搜尋功能 modal -->
+    <div class="modal fade" id="nav-search" tabindex="-1" aria-labelledby="nav-searchLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="nav-searchLabel">你想去哪裡?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <section class="container">
+                        <form method="post" asp-controller="Home" asp-action="Index" class="row flex-column">
+                            <div class="my-2"><input asp-for="NavSearch.Location" id="location-field" placeholder="位置" class="form-control" v-model="locationField"></div>
+                            <span id="location-msg" class="text-danger mb-2">{{ locationErrorMsg }} </span>
+                            <label for="date" class="col-2 col-form-label">日期</label>
+                            <div class="d-flex my-2" id="datepicker">
+                                <input asp-for="NavSearch.StartDate" type="text" id="startDate" class="form-control">
+                                <span class="px-2 fs-5">至</span>
+                                <input asp-for="NavSearch.EndDate" type="text" id="endDate" class="form-control">
+                            </div>
+                            <div class="d-flex justify-content-start align-items-center my-3">
+                                <span class="fs-5">人數</span>
+                                <div class="d-flex justify-content-center col-6">
+                                    <div id="minus-guests" class="btn" v-on:click="minusGuests"><i class="fas fa-minus-circle fs-4"></i></div>
+                                    <input asp-for="NavSearch.NumberOfGuests" type="text" id="guestNumbers" class="w-25 text-center" readonly="readonly" v-model="guests">
+                                    <div id="add-guests" class="btn" v-on:click="guests++"><i class="fas fa-plus-circle fs-4"></i></div>
+                                </div>
+                            </div>
+                            <button v-bind:disabled="btnDisabled" id="search-btn" class="btn btn-outline-success rounded-pill my-3 w-25" type="submit">搜尋</button>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @RenderBody()
+
+    <footer class="bg-light w-100 mt-5">
+        <div class="container my-3 mx-auto w-75">
+            <div class="row justify-content-space-between">
+                <div class="col-12 col-md-3 border-bottom">
+                    <ul>
+                        <li><h4 class="my-3">用戶支援</h4></li>
+                        <li class="my-2"><a href="">說明中心</a></li>
+                        <li class="my-2"><a href="">安全資訊</a></li>
+                        <li class="my-2"><a href="">退訂選項</a></li>
+                        <li class="my-2"><a href="">我們的新冠肺炎因應措施</a></li>
+                        <li class="my-2"><a href="">支援身心障礙人士</a></li>
+                        <li class="my-2"><a href="">回報社區問題</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-3 border-bottom">
+                    <ul>
+                        <li><h4 class="my-3">社區</h4></li>
+                        <li class="my-2"><a href="">救災住宿</a></li>
+                        <li class="my-2"><a href="">支援阿富汗難民</a></li>
+                        <li class="my-2"><a href="">消弭歧視</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-3 border-bottom">
+                    <ul>
+                        <li><h4 class="my-3">出租房源和舉辦體驗</h4></li>
+                        <li class="my-2"><a href="">開始出租／舉辦體驗</a></li>
+                        <li class="my-2"><a href="">保障房東和體驗達人</a></li>
+                        <li class="my-2"><a href="">瀏覽待客資源</a></li>
+                        <li class="my-2"><a href="">前往我們的社區論壇</a></li>
+                        <li class="my-2"><a href="">落實負責任出租和舉辦體驗的方法</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-3 border-bottom">
+                    <ul>
+                        <li><h4 class="my-3">關於</h4></li>
+                        <li class="my-2"><a href="">新聞中心</a></li>
+                        <li class="my-2"><a href="">了解新功能</a></li>
+                        <li class="my-2"><a href="">創辦人的信</a></li>
+                        <li class="my-2"><a href="">工作機會</a></li>
+                        <li class="my-2"><a href="">投資人</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid fs-6">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <p class="text-center">
+                        &copy; 2022 Creatures of Corner, Inc.&nbsp;
+                        <a href="">隱私</a>·
+                        <a href="">相關條款</a>·
+                        <a href="">網站地圖</a>
+                    </p>
+                </div>
+                <div class="col-12 col-md-6 d-flex justify-content-center">
+                    <a href="https://facebook.com" class="social"><i class="fab fa-facebook-square fs-3 mx-2"></i></a>
+                    <a href="https://line.com" class="social"><i class="fab fa-line fs-3 mx-2"></i></a>
+                    <a href="https://instagram.com" class="social"><i class="fab fa-instagram-square fs-3 mx-2"></i></a>
+                    <a href="https://twitter.com" class="social"><i class="fab fa-twitter-square fs-3 mx-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- login modal-->
+    <div class="modal" id="LoginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content d-flex ">
+                <div class="modal-header font-weight:bold">
+                    <h5 class="modal-title fs-3">登入</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @*<form class="select1" method="post" action="/Account/Signup">*@
+                    <span class="fs-4 fw-bold">Aircnc 歡迎您</span>
+
+                    <div class="input-group flex-nowrap w-100 mt-3">
+                        <input type="email" class="form-control" placeholder="電子郵件" aria-label="Email"
+                               aria-describedby="addon-wrapping" name="Email" id="input_login_email" required>
+                    </div>
+                    <div class="input-group flex-nowrap w-100 mt-3">
+
+                        <input type="password" class="form-control" placeholder="密碼" required aria-label="Password"
+                               aria-describedby="addon-wrapping" name="Password" id="input_login_password">
+                    </div>
+                    <span class="login-message-show"></span>
+                    <div class="d-flex justify-content-center mt-4 mb-5 align-items-center">
+                        <button class="btn btn-lg w-100 text-white enroll-btn" id="btn_login_submit">登入</button>
+                    </div>
+                    @*</form>*@
+                    <div class="sns-login">
+                        @*<button class="btn w-100 d-flex facebook p-2 my-4">
+                            <div class="fb-icon ms-3"><i class="fab fa-facebook fs-4"></i></div>
+                            <span class="mx-auto">繼續使用Facebook登入</span>
+                        </button>*@
+                        <button id="btn_GoogleLogin" class="btn w-100 d-flex facebook p-2 my-4">
+                            <div class="fb-icon ms-3"><i class="fab fa-google fs-4"></i></div>
+                            <span class="mx-auto">繼續使用Google登入3-1</span>
+                        </button>
+                        @*<button class="btn w-100 d-flex facebook p-2 mt-4 mb-3">
+                            <div class="fb-icon ms-3"><i class="fab fa-apple fs-4"></i></div>
+                            <span class="mx-auto">使用Apple帳號登入</span>
+                        </button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- signUp modal-->
+    <div class="modal" id="SignupModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content d-flex ">
+                <div class="modal-header font-weight:bold">
+                    <h5 class="modal-title fs-3">註冊</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="select1" method="post" action="/Account/Signup">
+                        <span class="fs-4 fw-bold">Aircnc 歡迎您</span>
+                        <div class="input-group flex-nowrap w-100 name mt-3">
+                            <input id="input_s_name" type="text" class="form-control" placeholder="姓名" aria-label="Text"
+                                   aria-describedby="addon-wrapping" name="Name" required>
+                        </div>
+
+                        <!-- <div class="input-group flex-nowrap w-75 mt-3">
+                            <input type="text" class="form-control" placeholder="出生日期" aria-label="Birthday"
+                                aria-describedby="addon-wrapping" name="Birthday">
+                        </div> -->
+
+                        <div class="input-group flex-nowrap w-100 mt-3">
+                            <input type="email" id="input_s_email" class="form-control" placeholder="電子郵件" aria-label="Email"
+                                   aria-describedby="addon-wrapping" name="Email" required>
+                        </div>
+                        <div class="input-group flex-nowrap w-100 mt-3">
+                            <input type="password" id="input_s_password" class="form-control" placeholder="密碼" aria-label="Password"
+                                   aria-describedby="addon-wrapping" minlength="8" name="Password" required>
+                        </div>
+                        <div class="d-flex justify-content-center mt-4 mb-5 align-items-center">
+                            <button class="btn btn-lg w-100 text-white enroll-btn" type="submit" id="btn_submit_signup">註冊</button>
+                        </div>
+                    </form>
+                    <div class="sns-sign-in">
+                        @*<button class="btn w-100 d-flex facebook p-2 my-4">
+                            <div class="fb-icon ms-3"><i class="fab fa-facebook fs-4"></i></div>
+                            <span class="mx-auto">繼續使用Facebook登入</span>
+                        </button>*@
+                        <button id="btn_GoogleLogin2" class="btn w-100 d-flex facebook p-2 my-4">
+                            <div class="fb-icon ms-3"><i class="fab fa-google fs-4"></i></div>
+                            <span class="mx-auto">繼續使用Google登入1-1</span>
+                        </button>
+                        @*<button class="btn w-100 d-flex facebook p-2 mt-4 mb-3">
+                            <div class="fb-icon ms-3"><i class="fab fa-apple fs-4"></i></div>
+                            <span class="mx-auto">使用Apple帳號登入</span>
+                        </button>*@
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    @*移到search.cshtml<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNUeaLH8za5eiC7S-fwsQ5tJjqCnusKb0&callback=initMap"></script>*@
+
+
+    <script src="https://unpkg.com/js-datepicker"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="~/js/GuestModule/SearchBtnVue.js"></script>
+
+    @*GoogleLogin*@
+    <script src="~/js/GuestModule/GoogleLogin.js"></script>
+
+    @{
+        @if (!isLogin)
+        {
+            <script src="https://apis.google.com/js/platform.js" async defer></script>
+            <script>
+                window.onload = function () {
+                    window.gapi.load('auth2', () => {
+                        window.gapi.auth2.init({
+                            client_id: '424934713546-h4hctt0sgsonpippt1opk7pa0omviune.apps.googleusercontent.com',
+                        });
+                    });
+                    renderButton();
+                    renderButton2();
+                };</script>
+        }
+
+    }
+    @*<script src="~/js/GuestModule/navSearch.js"></script>*@
+
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("endJS", required: false)
+
+    <script>
+
+        // navigation 搜尋中的日曆設定
+        const startInput = document.getElementById('startDate')
+        const endInput = document.getElementById('endDate')
+
+        const pickerStart = datepicker('#startDate', {
+            id: 1,
+            minDate: new Date(),
+            customDays: ['天', '一', '二', '三', '四', '五', '六'],
+            customMonths: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月',],
+            customOverlayMonths: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月',],
+            overlayButton: '送出',
+            formatter: (input, date, instance) => {
+                const value = date.toLocaleDateString()
+                input.value = value
+            },
+            onSelect: () => {
+                startInput.setAttribute('value', pickerStart.dateSelected.toLocaleDateString())
+                Cookies.set('navStartDate', pickerStart.dateSelected.toLocaleDateString())
+            }
+        })
+        const pickerEnd = datepicker('#endDate', {
+            id: 1,
+            customDays: ['天', '一', '二', '三', '四', '五', '六'],
+            customMonths: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月',],
+            customOverlayMonths: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月',],
+            overlayButton: '送出',
+            formatter: (input, date, instance) => {
+                const value = date.toLocaleDateString()
+                input.value = value
+            },
+            onSelect: () => {
+                endInput.setAttribute('value', pickerEnd.dateSelected.toLocaleDateString())
+                Cookies.set('navEndDate', pickerEnd.dateSelected.toLocaleDateString())
+                e = Cookies.get('navEndDate')
+                console.log(e)
+            }
+        })
+    </script>
+
+    <script>
+        //loginfetch
+        const btn_login_submit = document.querySelector('#btn_login_submit')
+        const input_login_email = document.querySelector('#input_login_email')
+        const input_login_password = document.querySelector('#input_login_password')
+        const loginMessageShow = document.querySelector('.login-message-show')
+        const btn_submit_signup = document.querySelector('#btn_submit_signup')
+        //signup
+        const input_s_name = document.querySelector('#input_s_name')
+        const input_s_email = document.querySelector('#input_s_email')
+        const input_s_passsword = document.querySelector('#input_s_password')
+        btn_submit_signup.addEventListener('click', () => {
+            if (input_s_passsword.value && input_s_email.value && input_s_passsword.value) {
+                alert('請前往信箱收取驗證信')
+            }
+
+        })
+
+        btn_login_submit.addEventListener('click', () => {
+            let data = {
+                Email: input_login_email.value,
+                Password: input_login_password.value
+            }
+
+            fetch('/Account/FetchLogin', {
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(jsonData => {
+                    console.log(jsonData)
+                    if (jsonData.isSuccess) {
+                        //關閉Modal
+                        $('#LoginModal').modal('hide')
+
+                        window.location.reload()
+
+
+                        //更新 UserInfo (PartialView)
+                        //fetch('/Account/UserInfo')
+                        //    .then(response => response.text())
+                        //    .then(textData => {
+                        //        userInfoArea.innerHTML = textData
+                        //    })
+                    }
+                    else {
+                        loginMessageShow.innerHTML = `<span class='message-show text-danger'>${jsonData.message}</span>`
+                    }
+                })
+
+        })
+
+    </script>
+
+
+</body>
+</html>

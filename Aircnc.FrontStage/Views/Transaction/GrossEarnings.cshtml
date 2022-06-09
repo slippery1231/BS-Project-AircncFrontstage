@@ -1,0 +1,230 @@
+﻿@{ ViewData["Title"] = "交易紀錄"; Layout = "RoomOwnerNavbar.cshtml";}
+
+@using Aircnc.FrontStage.Common
+
+
+@model IEnumerable<Aircnc.FrontStage.Models.ViewModels.Transaction.TransactionViewModel>
+
+@{ var roomName = (IEnumerable<string>)ViewData["RoomName"];
+    var grossList = Html.Raw(ViewData["grossList"]);
+}
+
+<!-- content -->
+<div class="container">
+    <!-- 新增收款方式的按鈕區塊 -->
+    <div class="row mt-5 ms-md-4">
+        <div class="col-10 col-md-8 add-new-payout-method border ms-md-5 p-3">
+            <div class="icon-add-payout-container d-flex">
+                <div class="icon-container">
+                    <i class="fas fa-exclamation-triangle fs-5 text-white icon"></i>
+                </div>
+                <div class="add-payout-content ms-3">
+                    <span class="fs-6 add fw-bold">新增收款方式</span>
+                    <span class="payout-content-text d-block fw-bold">你必須設定收款方式，才能收取款項。</span>
+                </div>
+            </div>
+            <div class="link-area mt-3 ms-5">
+                <a href="#" class="text-black fw-bold ms-3 know-detail">了解詳情</a>
+                <a href="~/Personal/PayoutMethod" class="text-black fw-bold start ms-2">開始吧</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查詢交易紀錄區塊 -->
+    <div class="row mt-2 ms-md-3">
+        <div class="col-10 col-md-8 ms-4 mt-3">
+            <span class="fs-2 fw-bold transactions ms-md-3">交易紀錄</span>
+        </div>
+        <!-- 選項切換列 -->
+        <div class="col-10 col-md-8">
+            <div class="options ms-md-2">
+                <ul class="nav-tabs">
+                    <a href="~/Transaction/CompletedTransaction" class="completed-transactions">已完成的收款</a>
+                    <a href="~/Transaction/FutureTransaction" class="future-transactions">即將入帳的收款</a>
+                    <a href="~/Transaction/GrossEarnings" class="gross-earnings">總收入</a>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 篩選器區塊 -->
+    <!-- 房源&收款方式 -->
+    <div class="row mt-1 ms-md-4">
+        <div class="col-10 col-md-8 ms-md-4">
+            <div class="input-group input-group-lg">
+                <select class="form-select mt-md-2" id="roomSelector" aria-label="Example select with button addon">
+                    <option selected>所有房源</option>
+                    @foreach (var room in roomName)
+                    {
+                        <option>@room</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查詢結果區塊 -->
+    <div class="row mt-3 mb-2  ms-md-5 query">
+        <div class="col-8 col-md-5 ms-md-5">
+        </div>
+        <div class="col-2 col-md-3 ms-md-5 submit">
+            <button class="btn border border-2 fw-bold query-submit" id="submit-btn">查詢</button>
+        </div>
+    </div>
+
+    <!-- reminder -->
+    @if (Model.Count() == 0)
+    {
+        <div class="row mt-3 ms-3 ms-md-5 mb-3 reminder">
+            <div class="col-10 col-md-8 ms-md-3 shadow py-4 px-3 border border-1">
+                <span class="fs-5">您沒有任何將至收款</span>
+                <span class="d-block fs-6">房源及目前選擇的收款方式</span>
+            </div>
+        </div>
+
+    }
+
+    @* 資料顯示區塊 *@
+    @if (Model.Count() != 0)
+    {
+        <div class="row ms-2">
+            <div class="col-10 col-md-8 ms-md-3" id="result">
+                <table class="table table-striped" id="table">
+                    <thead id="thead">
+                        <tr>
+                            <th>
+                                <span>下訂時間</span>
+                            </th>
+                            <th>
+                                <span>訂購人</span>
+                            </th>
+                            <th>
+                                <span>房源名稱</span>
+                            </th>
+                            <th>
+                                <span>總金額</span>
+                            </th>
+                            <th>
+                                <span>交易狀態</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    @*<tbody id="tbody">
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td id="create">@item.CreateTime</td>
+                            <td id="roomName">@item.RoomName</td>
+                            <td id="amount">@item.TotalAmount</td>
+                            <td id="status-type">@item.StatusType.GetDescriptionText()</td>
+                        </tr>
+                        }
+                    </tbody>*@
+                </table>
+            </div>
+        </div>
+    }
+
+</div>
+
+@section topCSS{
+    <link href="~/css/Transaction/GrossEarnings.css" rel="stylesheet" />
+}
+
+@section endJS{
+    <script>
+        //DOM
+        let roomSelector = document.getElementById('roomSelector')
+        let submitBtn = document.getElementById('submit-btn')
+        let table = document.getElementById('table')
+        let thead = document.getElementById('thead')
+        let result = document.getElementById('result')
+
+        //create
+        let tbody = document.createElement('tbody')
+
+        //宣告
+        let data = []
+        data = @grossList
+        //console.log(data)
+
+        let filterData = [] //放過濾的資料
+        data.forEach(x => {
+            filterData.push(x)
+        })
+        console.log(filterData)
+
+        window.onload = function () {
+            FilterDataByRoom()
+        }
+
+
+        //event
+        submitBtn.addEventListener('click', function () {
+            tbody.innerHTML = ''
+            FilterDataByRoom()
+
+        })
+
+        //function
+        function FilterDataByRoom() {
+            filterData = []
+            data.forEach(x => {
+                filterData.push(x)
+            })
+            //console.log(filterData)
+
+            if (roomSelector.value == '所有房源') {
+                filterData.forEach(content => {
+                    result.innerText = ''
+                    CreateTable(content)
+                })
+            }
+            //console.log(filterData)
+            //console.log(roomSelector.value)
+
+            if (roomSelector.value != '所有房源') {
+                filterData = filterData.filter(x => x.RoomName == roomSelector.value)
+
+                console.log(filterData)
+                console.log(roomSelector.value)
+
+                if (filterData.length != 0) {
+                    //console.log(12345)
+                    filterData.forEach(content => {
+                        result.innerText =''
+                        CreateTable(content)
+                    })
+                }
+                else {
+                    result.innerText = '查無資料!'
+                    result.classList.add('fs-5')
+                }
+            }
+        }
+
+        function CreateTable(content) {
+
+            let tbodyTr = document.createElement('tr')
+            let createTimeTd = document.createElement('td')
+            let userNameTd = document.createElement('td')
+            let roomNameTd = document.createElement('td')
+            let totalAmountTd = document.createElement('td')
+            let statusTd = document.createElement('td')
+
+            createTimeTd.innerText = content.CreateTime
+            userNameTd.innerText = content.OrderPerson
+            totalAmountTd.innerText = content.TotalAmount
+            roomNameTd.innerText = content.RoomName
+            statusTd.innerText = content.StatusType=='1'? '尚未撥款':'已完成撥款'
+            tbodyTr.append(createTimeTd, userNameTd, roomNameTd, totalAmountTd, statusTd)
+            tbody.append(tbodyTr)
+
+
+            table.append(thead, tbody)
+            result.append(table)
+        }
+
+    </script>
+
+}

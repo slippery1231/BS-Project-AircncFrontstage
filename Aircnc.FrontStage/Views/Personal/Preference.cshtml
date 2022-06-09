@@ -1,0 +1,127 @@
+﻿@model Aircnc.FrontStage.Models.ViewModels.Member.MemberViewModel
+@{     ViewData["Title"] = "全域偏好 - 帳號設定";}
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="topper-content ps-5 col-md-12">
+                <div class=" title">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/Personal/PersonalBox">帳號</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">全球偏好設定</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="title mb-5">
+                    <h4>全球偏好設定</h4>
+                </div>
+            </div>
+            <div class="lower-container">
+                <div class="left-container col-12 col-md-7 ps-5">
+                    <div class="each-item">
+                        <h5>偏好語言</h5>
+                        <a class="btn" id="edit-btn" data-bs-toggle="collapse" href="#language-selector"
+                           role="button" aria-expanded="false" aria-controls="language-selector">
+                            編輯
+                        </a>
+                    </div>
+                    <div class="collapse" id="language-selector">
+                        <div class="mb-3">這會更新您在 Airbnb 上看到的內容，以及我們與您的溝通方式。</div>
+                        <div class="dropdown" id="select-language">
+                            <select class="form-select" aria-label="select-language">
+                                <option value="Chinese_Simplified" selected>中文 (繁體)</option>
+                                <option value="Chinese_Traditional">中文 (简体)</option>
+                                <option value="Indian">हिन्दी</option>
+                                <option value="French">Français</option>
+                                <option value="Arabic">العربية</option>
+                                <option value="Korean">한국어</option>
+                                <option value="Thai">ภาษาไทย</option>
+                                <option value="Silesian">Ślůnski</option>
+                                <option value="Japanese">日本語</option>
+                                <option value="Spanish">Español</option>
+                                <option value="English_UK">English (UK)</option>
+                                <option value="English_Canada">English (Canada)</option>
+                                <option value="English_Australia">English (Australia)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="each-item">
+                        <h5>偏好幣別</h5>
+                        <a class="btn" id="edit-btn" data-bs-toggle="collapse" href="#currency-selector"
+                           role="button" aria-expanded="false" aria-controls="currency-selector">
+                            編輯
+                        </a>
+                    </div>
+                    <div class="collapse" id="currency-selector">
+                        <div class="dropdown" id="select-currency">
+                            <select class="form-select" aria-label="select-currency">
+                                <option value="TWD" selected>新台幣</option>
+                                <option value="HKD">港紙</option>
+                                <option value="JPY">日元</option>
+                                <option value="SGD">新加坡幣</option>
+                                <option value="AUD">澳元</option>
+                                <option value="RUB">俄羅斯盧布</option>
+                                <option value="CNY">人民幣</option>
+                                <option value="CHF">瑞士法郎</option>
+                                <option value="THB">泰銖</option>
+                                <option value="EUR">歐元</option>
+                                <option value="NOK">捷克克朗</option>
+                                <option value="GBP">英鎊</option>
+                                <option value="USD">美金</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="each-item">
+                        <h5>時區</h5>
+                        <a class="btn" id="edit-btn" data-bs-toggle="collapse" href="#time-zone-selector"
+                           role="button" aria-expanded="false" aria-controls="time-zone-selector">
+                            編輯
+                        </a>
+                    </div>
+                    <div class="collapse" id="time-zone-selector">
+                        <div class="dropdown" id="select-time-zone">
+                            <select class="form-select" aria-label="select-time-zone">
+                                <option value="Istanbul" selected>(GMT-11:00) Istanbul</option>
+                                <option value="Europe">(GMT+02:00) Europe</option>
+                                <option value="Moscow">(GMT+03:00) Moscow</option>
+                                <option value="India">(GMT+04:00) Indian</option>
+                                <option value="Astana">(GMT+06:00) Astana</option>
+                                <option value="Dhaka">(GMT+07:00) Dhaka</option>
+                                <option value="Jakarta">(GMT+07:00) Jakarta</option>
+                                <option value="Taipei">(GMT+08:00) Taipei</option>
+                                <option value="Hong Kong">(GMT+08:00) Hong Kong</option>
+                                <option value="Singapore">(GMT+08:00) Singapore</option>
+                                <option value="Tokyo">(GMT+09:00) Tokyo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-container col-12 col-md-3 py-md-auto d-none d-md-block ms-md-5">
+                    <hr id="hr-sm-display">
+                    <div class="mb-4">
+                        <i class="bi bi-sliders2-vertical"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                             class="bi bi-sliders2-vertical" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M0 10.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1H3V1.5a.5.5 0 0 0-1 0V10H.5a.5.5 0 0 0-.5.5ZM2.5 12a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2a.5.5 0 0 0-.5-.5Zm3-6.5A.5.5 0 0 0 6 6h1.5v8.5a.5.5 0 0 0 1 0V6H10a.5.5 0 0 0 0-1H6a.5.5 0 0 0-.5.5ZM8 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2A.5.5 0 0 0 8 1Zm3 9.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1H14V1.5a.5.5 0 0 0-1 0V10h-1.5a.5.5 0 0 0-.5.5Zm2.5 1.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0v-2a.5.5 0 0 0-.5-.5Z" />
+                        </svg>
+                    </div>
+                    <h5>全球偏好設定</h5>
+                    <p>Airbnb 非常重視你的隱私。你可以使用此頁面選擇分享活動的方式。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+@section topCSS{
+    <link href="~/css/Preference/normalize.css" rel="stylesheet" />
+    <link href="~/css/Preference/Preference.css" rel="stylesheet" />
+}

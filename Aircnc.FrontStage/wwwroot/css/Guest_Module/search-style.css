@@ -1,0 +1,89 @@
+.advance-search{
+    position: fixed;
+    top: 77px;
+    z-index: 3;
+    background-color: #fff;
+}
+
+.mapbox{
+    position:sticky;
+    top: 130px;
+}
+
+/*手機板*/
+@media screen and (max-width:767px){
+    .carousel-item > img{
+        height: 400px;
+        }
+    .room-list-map {
+        margin-top: 200px;
+        /* height: 80%; */
+    }
+    #map {
+        height: 70vh;
+    }
+}
+/*大螢幕*/
+@media screen and (min-width:768px){
+    .carousel-item > img{
+        height: 12vw;
+        }
+    .room-list-map {
+        margin-top: 130px;
+        /* height: 80%; */
+    }
+    #map {
+        height: 80vh;
+    }
+}
+
+.card-body{
+    padding: 0;
+    margin: 0 15px;
+}
+#btn-switch-map-list{
+    width: 100px;
+    position: fixed;
+    bottom: 50px;
+    left: 40%;
+    z-index: 2;
+}
+.btn-check:focus+.btn, .btn:focus{
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(253, 253, 253, 0.25);
+}
+.advance-search-item{
+    font-size: 14px;
+}
+.page-link{
+    color: black;
+}
+.page-link:focus {
+    z-index: 2;
+    color: black;
+    background-color: #e9ecef;
+    outline: 0;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+}
+.page-link:hover {
+    z-index: 2;
+    color: black;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+.page-item.active .page-link {
+    z-index: 2;
+}
+#mapRoomImg {
+    object-fit: contain;
+    width: 100%;
+    min-width: 125px;
+}
+.mapRoomName {
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2; /*行數*/
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}

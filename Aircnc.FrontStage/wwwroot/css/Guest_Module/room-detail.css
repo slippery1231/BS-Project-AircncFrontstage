@@ -1,0 +1,79 @@
+.carousel.slide{
+    margin-top: 100px;
+}
+
+.room-title{
+    border-bottom: 1px solid #000;
+}
+
+.carousel-inner{
+    border-radius: 50px;
+    height: 300px;
+}
+
+#reservation-sticky{
+    top: 90px;
+    z-index: 3;
+}
+
+#reserve-btn{
+    width: 100px;
+    position: fixed;
+    bottom: 80px;
+    right: 100px;
+    z-index: 2;
+}
+
+#review-bar{
+    width: 80%;
+    height: 10px;
+    border-radius: 5px;
+    background: rgb(143, 143, 143);
+    align-self: center;
+}
+#review-bar-dark {
+    width: 90%;
+    height: 10px;
+    border-radius: 5px;
+    background: #000;
+    align-self: center;
+}
+.review-img{
+    height: 50px;
+    width: 50px;
+}
+
+input[type="date"]{
+    position: relative;
+}
+input[type="date"]::-webkit-calendar-picker-indicator{
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+.roomDetail{
+    margin-bottom: 150px;
+}
+#calendar{
+    width: 500px;
+}
+.qs-datepicker-container {
+    z-index: 2 !important;
+}
+.qs-controls {
+    background: none !important;
+}
+#map {
+    height: 400px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
+}

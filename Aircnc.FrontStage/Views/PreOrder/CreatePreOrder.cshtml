@@ -1,0 +1,78 @@
+﻿@*@model Aircnc.FrontStage.Models.ViewModels.PreOrder.CreatePreOrderViewModel
+    <div class="ecpay">
+        <div id="id">@Model.MerchantID</div>
+        <div id="trade">@Model.MerchantTradeNo</div>
+        <div id="trade-date">@Model.MerchantTradeDate</div>
+        <div id="payment">@Model.PaymentType</div>
+        <div id="desc">@Model.TradeDesc</div>
+        <div id="item-name">@Model.ItemName</div>
+        <div id="return-url">@Model.ReturnURL</div>
+        <div id="amount">@Model.TotalAmount</div>
+        <div id="encrypt">@Model.EncryptType</div>
+        <div id="mac-value">@Model.CheckMacValue</div>
+        <div id="choose">@Model.ChoosePayment</div>
+    </div>
+
+    <script>
+        //dom
+        const MerchantID = document.getElementById('id')
+        const Trade = document.getElementById('trade')
+        const TradeDate = document.getElementById('trade-date')
+        const Payment = document.getElementById('payment')
+        const Description = document.getElementById('desc')
+        const ItemName = document.getElementById('item-name')
+        const ReturnURL = document.getElementById('return-url')
+        const Amount = document.getElementById('amount')
+        const Encrypt = document.getElementById('encrypt')
+        const MacValue = document.getElementById('mac-value')
+        const ChoosePayment = document.getElementById('choose')
+
+        let result = {}
+
+        result.MerchantID = MerchantID.innerText
+        result.Trade = Trade.innerText
+        result.TradeDate = TradeDate.innerText
+        result.Payment = Payment.innerText
+        result.Description = Description.innerText
+        result.ItemName = ItemName.innerText
+        result.ReturnURL = ReturnURL.innerText
+        result.Amount = Amount.innerText
+        result.Encrypt = Encrypt.innerText
+        result.MacValue = MacValue.innerText
+        result.ChoosePayment = ChoosePayment.innerText
+
+
+        window.onload = function () {
+            fetch("https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(result)
+
+            }).then(response => response.json())
+                .then(jsonData => {
+                    console.log(jsonData)
+                })
+
+        }
+    </script>*@
+
+@model System.Collections.Generic.Dictionary<string, string>
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<body>
+    <form id="form" name="form" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="POST" hidden>
+        @foreach (var key in @Model.Keys.ToList())
+        {
+            @(key) <input type="text" name="@key" value="@Model[key]" /><br />
+        }
+    </form>
+    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById("form").submit();
+        }
+    </script>
+</body>
+</html>

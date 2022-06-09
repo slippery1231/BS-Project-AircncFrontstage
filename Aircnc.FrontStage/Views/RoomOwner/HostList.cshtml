@@ -1,0 +1,228 @@
+﻿@using Aircnc.FrontStage.Common
+@{
+    ViewData["Title"] = "管理房源";
+
+    Layout = "RoomOwnerNavbar.cshtml";
+
+}
+@model IEnumerable<Aircnc.FrontStage.Models.ViewModels.RoomOwner.HostListViewModel>
+
+@section topCSS{
+    <link href="~/css/Room_Owner/HostList.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}
+
+<section class="container-fluid d-flex justify-content-between mt-5">
+    <h1 class="h1_house_nums">@Model.Select(x => x.RoomName).ToList().Count 個房源</h1>
+    <button class="btn btn_create_house"><i class="fas fa-plus"></i><a href="/RoomOwner/CreateRoom">建立房源</a></button>
+</section>
+
+<section class="container-fluid d-flex hostList_filter_container row row-cols-1 row-cols-md-4">
+    <!-- 搜尋房源 -->
+    <div class="searchBar">
+        <input id="hostList_searchBar" type="text" name="hostList_searchBar" placeholder="搜尋房源" value="" />
+        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="#666666" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+        </svg>
+        <button id="button_hostList_searchBar" onclick="filterBtn(@Model.Select(x => x.UserId).First())" type="submit" name="button_hostList_searchBar">
+        </button>
+    </div>
+    <!-- 房間與床鋪 -->
+    <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle dropdown-button" onclick="dropdown_menu_filter('room_count')" href="#" role="button" id="dropdownMenuLink_room" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            房間與床鋪
+        </a>
+        <!-- 臥室 -->
+        <div class="dropdown-menu mt-5 dropdown_menu_filter_room_count" aria-labelledby="dropdownMenuLink_room">
+            <div class="d-flex justify-content-between dropdown_room_and_bed_count">
+                <p class="p_dropdown_edit_room">臥室</p>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn_edit btn_edit_room_minus" onclick="room_minus('edit_room_count')"> <i class="fas fa-minus"></i> </button>
+                    <span class="d-block edit_room_count">0</span>
+                    <button class="btn btn_edit btn_edit_room_plus" onclick="room_plus('edit_room_count')"> <i class="fas fa-plus room_plus"></i></button>
+                </div>
+            </div>
+
+            <!-- 床鋪 -->
+            <div class="d-flex justify-content-between dropdown_room_and_bed_count">
+                <p class="p_dropdown_edit_bed">床鋪</p>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn_edit btn_edit_room_minus" onclick="room_minus('edit_bed_count')"> <i class="fas fa-minus"></i> </button>
+                    <span class="d-block edit_bed_count">0</span>
+                    <button class="btn btn_edit btn_edit_room_plus" onclick="room_plus('edit_bed_count')"> <i class="fas fa-plus room_plus"></i></button>
+                </div>
+            </div>
+
+            <!-- 浴室 -->
+            <div class="d-flex justify-content-between dropdown_room_and_bed_count">
+                <p class="p_dropdown_edit_bathroom">浴室</p>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn_edit btn_edit_room_minus" onclick="room_minus('edit_bathroom_count')"> <i class="fas fa-minus"></i> </button>
+                    <span class="d-block edit_bathroom_count">0</span>
+                    <button class="btn btn_edit btn_edit_room_plus" onclick="room_plus('edit_bathroom_count')"> <i class="fas fa-plus room_plus"></i></button>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between dropdown_edit_apply_and_delete_section">
+                <button class="btn btn_dropdown_edit_clear" onclick="edit_clear('clear_room')">清除</button>
+                <button class="btn btn-dark btn_edit_apply" onclick="filterBtn(@Model.Select(x => x.UserId).First())">套用</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 設備與服務 -->
+    <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" onclick="dropdown_menu_filter('equipment_and_service')" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            設備與服務
+        </a>
+
+        <div class="dropdown-menu mt-5 dropdown_menu_filter_equipment_and_service" aria-labelledby="dropdownMenuLink">
+            <div class="d-flex justify-content-between dropdown_equipment_and_service flex-wrap">
+
+                <div class="form_check_equipment_and_service">
+                    <input type="checkbox" id="WiFi" value="1" />
+                    <label for="WiFi">WiFi</label>
+                </div>
+
+                <div class="form_check_equipment_and_service">
+                    <input type="checkbox" id="Kitchen" value="2" />
+                    <label for="Kitchen">廚房</label>
+                </div>
+
+                <div class="form_check_equipment_and_service">
+                    <input type="checkbox" id="TV" value="3" />
+                    <label for="TV">電視</label>
+                </div>
+
+                <div class="form_check_equipment_and_service">
+                    <input type="checkbox" id="Washing" value="4" />
+                    <label for="Washing">洗衣機</label>
+                </div>
+
+                <div class="form_check_equipment_and_service">
+                    <input type="checkbox" id="Aircon" value="5" />
+                    <label for="Aircon">空調</label>
+                </div>
+
+                <div class="form_check_equipment_and_service">
+                    <input type="checkbox" id="Parking" value="6" />
+                    <label for="Parking">停車位</label>
+                </div>
+
+            </div>
+
+            <!-- 清除 -->
+            <div class="d-flex justify-content-between dropdown_edit_apply_and_delete_section">
+                <button class="btn btn_dropdown_edit_clear" onclick="edit_clear('clear_equipment_and_service')">清除</button>
+                <button class="btn btn-dark btn_edit_apply" onclick="filterBtn(@Model.Select(x => x.UserId).First())">套用</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 房源狀態 -->
+    <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" onclick="dropdown_menu_filter('roomStatus')" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            房源狀態
+        </a>
+
+        <div class="dropdown-menu mt-5 dropdown_menu_filter_roomStatus" aria-labelledby="dropdownMenuLink">
+            <div class="d-flex justify-content-between dropdown_roomStatus flex-wrap">
+                <div class="form_check_roomStatus">
+                    <input type="checkbox" value="1" id="Online">
+                    <label for="Online">
+                        上架中
+                    </label>
+                </div>
+
+                <div class="form_check_roomStatus">
+                    <input type="checkbox" value="4" id="Unpublish">
+                    <label for="Unpublish">
+                        取消發布
+                    </label>
+                </div>
+
+                <div class="form_check_roomStatus">
+                    <input type="checkbox" value="2" id="Offline">
+                    <label for="Offline">
+                        已下架
+                    </label>
+                </div>
+
+            </div>
+
+            <!-- 清除 -->
+            <div class="d-flex justify-content-between dropdown_edit_apply_and_delete_section">
+                <button class="btn btn_dropdown_edit_clear" onclick="edit_clear('clear_roomStatus')">清除</button>
+                <button class="btn btn-dark btn_edit_apply" onclick="filterBtn(@Model.Select(x => x.UserId).First())">套用</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container-fluid">
+    <table class="table">
+        <thead>
+            <tr>
+                @*<th>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                    </div>
+                </th>*@
+                <th scope="col">房源</th>
+                <th scope="col">狀態</th>
+                <th scope="col">代辦事項</th>
+                <th scope="col">即時預定</th>
+                <th scope="col">臥室</th>
+                <th scope="col">床位</th>
+                <th scope="col">衛浴</th>
+                <th scope="col">位置</th>
+                <th scope="col">上次修改時間</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Model)
+            {
+                <tr class="tr_roomlist w-100">
+
+                    @*<td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        </div>
+                    </td>*@
+
+                    <td class="hostList_room_name">
+                        <a href="/RoomOwner/HostRoomEditList?roomid=@room.RoomId">
+                            <div class="d-flex  host_list_house_img">
+                                <img src="@room.ImageUrl" alt="">
+                                <p class="host_list_house_name">@room.RoomName</p>
+                            </div>
+                        </a>
+
+                    </td>
+
+                    <td>
+                        @*<i class="fas fa-hourglass-half"></i>*@
+                        @Html.Raw(room.State)
+                    </td>
+                    <td><button class="btn">完成</button></td>
+                    <td><i class="fas fa-check-circle"></i>開</td>
+                    <td>@room.RoomCount</td>
+                    <td>@room.BedCount</td>
+                    <td>@room.BathroomCount</td>
+                    <td>@room.Address</td>
+                    @*<td>(@room.RoomOwnerDto.LastChangeTime==@null?@room.RoomOwnerDto.CreateTime:@room.RoomOwnerDto.LastChangeTime)</td>*@
+                    <td>
+                        @if (@room.LastChangeTime == null)@room.CreateTime
+                        else @room.LastChangeTime
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+@section endJS{
+    <script src="~/js/RoomOwner/HostList.js"></script>
+}
+
